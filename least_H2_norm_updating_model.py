@@ -76,13 +76,11 @@ def quad_Frob(X, F_values, args):
         A = 1 / (8 * omega1) * (np.dot(Y.T, Y) ** 2)
         for i in range(len(A)):
             for j in range(len(A)):
-                A[i, j] = A[i, j] - (omega3 / (8 * omega1 * (n * omega3 + omega1))) * np.dot(Y[:, i].T,
-                                                                                             Y[:, i]) * np.dot(
-                    Y[:, j].T, Y[:, j])
+                A[i, j] = A[i, j] - (omega3 / (8 * omega1 * (n * omega3 + omega1))) * np.dot(Y[:, i].T,Y[:, i]) * np.dot(Y[:, j].T, Y[:, j])
 
-        J = np.zeros((m, 1))  # 式（2）J
-        # X_bar = np.zeros((1, m))  # 式（2） Y^T
-        # B1 = np.zeros((1, m))  # 式（2）B
+        J = np.zeros((m, 1))
+        # X_bar = np.zeros((1, m))
+        # B1 = np.zeros((1, m))
         for i in range(m):
             J[i] = 1 - omega4 / (4 * omega1 + 4 * n * omega3) * np.dot(Y[:, i].T, Y[:, i])
         
