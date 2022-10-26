@@ -16,7 +16,7 @@ def _compute_coeffs(W, tol_svd, b, option):
     else:
         U, S, VT = LA.svd(W, full_matrices=False)
 
-    # Make sure the condition number is not too high
+    # Make sure the condition number is not too large
     indices = S < tol_svd
     S[indices] = tol_svd
     Sinv = np.diag(1 / S)
@@ -99,7 +99,7 @@ def quad_Frob(X, F_values, args):
 
 
     else:  # Construct a full model
-        # Here we have enough points. 
+        
         b = F_values
         phi_Q = np.array([])
         for i in range(m):
