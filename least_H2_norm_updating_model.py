@@ -47,7 +47,7 @@ def quad_Frob(X, F_values, args):
     if (m < (n + 1) * (n + 2) / 2):
         c1 = args.c1
         c2 = args.c2
-        c3 = args.c2
+        c3 = args.c3
         r = 1
         V2 = (np.pi ** (n / 2) / math.gamma(n / 2 + 1))
 
