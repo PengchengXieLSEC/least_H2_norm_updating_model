@@ -16,12 +16,12 @@ def _compute_coeffs(W, tol_svd, b, option):
     else:
         U, S, VT = LA.svd(W, full_matrices=False)
 
-    # Make sure the condition number is not too large
+    # Check the condition number
     indices = S < tol_svd
     S[indices] = tol_svd
     Sinv = np.diag(1 / S)
     V = VT.T
-    # Get the coefficients
+    # Coefficients
     lambda_0 = reduce(np.dot, [V, Sinv, U.T, b])
     return (lambda_0)
 
@@ -81,7 +81,7 @@ def quad_Frob(X, F_values, args):
 
         lambda_0 = _compute_coeffs(W, tol_svd, b, option='partial')  
 
-        # Grab the coeffs of linear terms (g) and the ones of quadratic terms
+        # Grab the coeffs of linear terms and the ones of quadratic terms
         
         c = lambda_0[m:m + 1]
         g = lambda_0[m + 1:m + 1 + n]
@@ -117,7 +117,7 @@ def quad_Frob(X, F_values, args):
 
         lambda_0 = _compute_coeffs(W, tol_svd, b, option='full')
 
-        # Retrieve (g) and (H)
+        # Retrieve g and H
         g = lambda_0[1:n + 1, :]
         cont = n + 1
         H = np.zeros((n, n))
