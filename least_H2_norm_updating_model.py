@@ -22,11 +22,11 @@ def _compute_coeffs(W, tol_svd, b, option):
     Sinv = np.diag(1 / S)
     V = VT.T
     # Coefficients
-    lambda_0 = reduce(np.dot, [V, Sinv, U.T, b])
-    return (lambda_0)
+    lambdacg = reduce(np.dot, [V, Sinv, U.T, b])
+    return (lambdacg)
 
 
-def quad_Frob(X, F_values, args):
+def quad_model_Htwo(X, F_values, args):
     """
     Construct a quadratic model
     """
@@ -47,17 +47,13 @@ def quad_Frob(X, F_values, args):
         c2 = args.c2
         c3 = args.c3
         r = 1
-        V2 = (np.pi ** (n / 2) / math.gamma(n / 2 + 1))
 
-        
         omega1 = (c1 * r ** 4 / (2 * (n + 4) * (n + 2)) + c2 * r ** 2 / (n + 2) + c3)
         omega2 = (c1 * r ** 2 / (n + 2) + c2)
         omega3 = c1 * r ** 4 / (4 * (n + 4) * (n + 2))
         omega4 = c1 * r ** 2 / (n + 2)
         omega5 = c1
         
-
-       
         b = np.vstack((F_values, np.zeros((n + 1, 1))))
        
         A = 1 / (8 * omega1) * (np.dot(Y.T, Y) ** 2)
@@ -77,23 +73,23 @@ def quad_Frob(X, F_values, args):
 
         W = np.vstack((line1, line2, line3))
 
-        lambda_0 = _compute_coeffs(W, tol_svd, b, option='partial')  
+        lambdacg = _compute_coeffs(W, tol_svd, b, option='partial')  
 
         # Grab the coeffs of linear terms and the ones of quadratic terms
         
-        c = lambda_0[m:m + 1]
-        g = lambda_0[m + 1:m + 1 + n]
+        c = lambdacg[m:m + 1]
+        g = lambdacg[m + 1:m + 1 + n]
         
 
         H = np.zeros((n, n))  
         
         inner_sum = 0
         for j in range(m):
-            inner_sum += lambda_0[j] * np.dot(Y[:, j].reshape(1, n), Y[:, j].reshape(n, 1))
+            inner_sum += lambdacg[j] * np.dot(Y[:, j].reshape(1, n), Y[:, j].reshape(n, 1))
 
         H = H - (1 / (2 * omega1)) * (2 * omega3 * ((1 / (2 * (2 * n * omega3 + 2 * omega1))) * inner_sum - n * omega4 * c / (2 * n * omega3 + 2 * omega1)) + omega4 * c) * np.identity(n)
         for j in range(m):
-            H = H + 1 / (4 * omega1) * (lambda_0[j] * np.dot(Y[:, j].reshape(n, 1), Y[:, j].reshape(1, n)))
+            H = H + 1 / (4 * omega1) * (lambdacg[j] * np.dot(Y[:, j].reshape(n, 1), Y[:, j].reshape(1, n)))
 
 
     else:  # Construct a full model
@@ -113,15 +109,15 @@ def quad_Frob(X, F_values, args):
         W = np.hstack((np.ones((m, 1)), Y.T))
         W = np.hstack((W, phi_Q))
 
-        lambda_0 = _compute_coeffs(W, tol_svd, b, option='full')
+        lambdacg = _compute_coeffs(W, tol_svd, b, option='full')
 
-        # Retrieve g and H
-        g = lambda_0[1:n + 1, :]
+        # g and H
+        g = lambdacg[1:n + 1, :]
         cont = n + 1
         H = np.zeros((n, n))
 
         for j in range(n):
-            H[j:n, j] = lambda_0[cont:cont + n - j, :].reshape((n - j,))
+            H[j:n, j] = lambdacg[cont:cont + n - j, :].reshape((n - j,))
             cont = cont + n - j
 
         H = H + H.T - np.diag(np.diag(H))
