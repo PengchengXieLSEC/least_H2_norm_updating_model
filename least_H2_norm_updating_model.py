@@ -28,13 +28,11 @@ def _compute_coeffs(W, tol_svd, b, option):
 
 def quad_Frob(X, F_values, args):
     """
-    Given a set of points in the trust region
-    and their values, construct a quadratic model
-    
+    Construct a quadratic model
     """
     
     eps = np.finfo(float).eps
-    tol_svd = eps ** 5
+    tol_svd = eps ** 6
     
     (n, m) = X.shape
 
