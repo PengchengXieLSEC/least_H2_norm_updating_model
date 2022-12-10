@@ -9,7 +9,7 @@ import math
 from scipy import linalg as LA
 
 
-def _compute_coeffs(W, tol_svd, b, option):
+def _obtain_coeffs(W, tol_svd, b, option):
    
     if option == 'partial':
         U, S, VT = LA.svd(W)
@@ -36,17 +36,17 @@ def quad_model_Htwo(X, F_values, args):
     
     (n, m) = X.shape
 
-    H = np.zeros((n, n))
+    G = np.zeros((n, n))
     g = np.zeros((n, 1))
 
-    # Shift the points to the origin
+    # Shift the points
     Y = X - np.dot(np.diag(X[:, 0]), np.ones((n, m)))
 
     if (m < (n + 1) * (n + 2) / 2):
         c1 = args.c1
         c2 = args.c2
         c3 = args.c3
-        r = 1
+        r  = args.r
 
         omega1 = (c1 * r ** 4 / (2 * (n + 4) * (n + 2)) + c2 * r ** 2 / (n + 2) + c3)
         omega2 = (c1 * r ** 2 / (n + 2) + c2)
@@ -73,7 +73,7 @@ def quad_model_Htwo(X, F_values, args):
 
         W = np.vstack((line1, line2, line3))
 
-        lambdacg = _compute_coeffs(W, tol_svd, b, option='partial')  
+        lambdacg = _obtain_coeffs(W, tol_svd, b, option='partial')  
 
         # Grab the coeffs of linear terms and the ones of quadratic terms
         
@@ -81,15 +81,15 @@ def quad_model_Htwo(X, F_values, args):
         g = lambdacg[m + 1:m + 1 + n]
         
 
-        H = np.zeros((n, n))  
+        G = np.zeros((n, n))  
         
         inner_sum = 0
         for j in range(m):
             inner_sum += lambdacg[j] * np.dot(Y[:, j].reshape(1, n), Y[:, j].reshape(n, 1))
 
-        H = H - (1 / (2 * omega1)) * (2 * omega3 * ((1 / (2 * (2 * n * omega3 + 2 * omega1))) * inner_sum - n * omega4 * c / (2 * n * omega3 + 2 * omega1)) + omega4 * c) * np.identity(n)
+        G = G - (1 / (2 * omega1)) * (2 * omega3 * ((1 / (2 * (2 * n * omega3 + 2 * omega1))) * inner_sum - n * omega4 * c / (2 * n * omega3 + 2 * omega1)) + omega4 * c) * np.identity(n)
         for j in range(m):
-            H = H + 1 / (4 * omega1) * (lambdacg[j] * np.dot(Y[:, j].reshape(n, 1), Y[:, j].reshape(1, n)))
+            G = G + 1 / (4 * omega1) * (lambdacg[j] * np.dot(Y[:, j].reshape(n, 1), Y[:, j].reshape(1, n)))
 
 
     else:  # Construct a full model
@@ -99,26 +99,26 @@ def quad_model_Htwo(X, F_values, args):
         for i in range(m):
             y = Y[:, i]
             y = y[np.newaxis]  
-            aux_H = y * y.T - 0.5 * np.diag(pow(y, 2)[0])
+            aux_G = y * y.T - 0.5 * np.diag(pow(y, 2)[0])
             aux = np.array([])
             for j in range(n):
-                aux = np.hstack((aux, aux_H[j:n, j]))
+                aux = np.hstack((aux, aux_G[j:n, j]))
 
             phi_Q = np.vstack((phi_Q, aux)) if phi_Q.size else aux
 
         W = np.hstack((np.ones((m, 1)), Y.T))
         W = np.hstack((W, phi_Q))
 
-        lambdacg = _compute_coeffs(W, tol_svd, b, option='full')
+        lambdacg = _obtain_coeffs(W, tol_svd, b, option='full')
 
-        # g and H
+        # g and G
         g = lambdacg[1:n + 1, :]
         cont = n + 1
-        H = np.zeros((n, n))
+        G = np.zeros((n, n))
 
         for j in range(n):
-            H[j:n, j] = lambdacg[cont:cont + n - j, :].reshape((n - j,))
+            G[j:n, j] = lambdacg[cont:cont + n - j, :].reshape((n - j,))
             cont = cont + n - j
 
-        H = H + H.T - np.diag(np.diag(H))
-    return (H, g, c)
+        G = G + G.T - np.diag(np.diag(G))
+    return (G, g, c)
