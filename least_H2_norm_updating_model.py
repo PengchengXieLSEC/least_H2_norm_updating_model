@@ -1,7 +1,8 @@
 """
 Description:
 Codes for constructing least H^2 norm updating quadratic model 
-Authors: Pengcheng Xie, Ya-xiang Yuan Connect: xpc@lsec.cc.ac.cn
+Authors: Pengcheng Xie, Ya-xiang Yuan 
+Connect: xpc@lsec.cc.ac.cn
 """
 import numpy as np
 from functools import reduce
@@ -28,7 +29,7 @@ def _obtain_coeffs(W, tol_svd, b, option):
 
 def quad_model_Htwo(X, F_values, args):
     """
-    Construct a quadratic model
+    Construct a quadratic model based on least H^2 norm updating
     """
     
     eps = np.finfo(float).eps
