@@ -68,7 +68,7 @@ function [res, iteration, f_hist] = dfo_tr(bb_func, x_initial, clist, options)
   n = size(x_initial, 1);
   % maxY = (n+1) * (n+2) / 2
   maxY = 2 * n + 1;
-  minY = n + 1;
+  minY = 2;
 
   % iterations counters
   func_eval = 0; iter_suc = func_eval; iteration = iter_suc;
