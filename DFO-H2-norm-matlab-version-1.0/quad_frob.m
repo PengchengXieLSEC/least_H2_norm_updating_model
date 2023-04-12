@@ -55,7 +55,7 @@ function [H, g_hat, c_hat] = quad_frob(X_value, F_values, clist)
         % (H) for g.T s + s.T H s
         g = lambda_0(m+2:end);
         
-        c = lambda_0(m+1);    % 新加入的c
+        c = lambda_0(m+1);    % new c
 
         inner_sum = 0;
         for j = 1:m
@@ -71,12 +71,12 @@ function [H, g_hat, c_hat] = quad_frob(X_value, F_values, clist)
         c_hat = c + 0.5 * X_value(1:end, 1)' * H * X_value(1:end, 1) - g' * X_value(1:end, 1);
         
     else  % Construct a full model
-        % Here we have enough points. Solve the sys of equations.
+        % Here enough points. Solve the sys of equations.
         b = F_values;
         phi_Q = [];
         for i = 1:m
             y = Y(1:end, i);
-            y = y(newaxis);    % turn y from 1D to a 2D array
+            y = y(newaxis);    
             yguodu = (y.^2);
             aux_H = y * y' - 0.5 * diag(yguodu(0));
             aux = [];
