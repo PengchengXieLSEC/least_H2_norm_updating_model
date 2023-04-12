@@ -13,6 +13,6 @@ function [res, iter, fhist] = bb_optimize(func, x_0, alg, clist, options)
   end
   t2 = clock;
   time_consump = etime(t2, t1);
-  % fprintf("Total time is %.3f seconds with %s method.",time_consump, alg);
+
 end
 
