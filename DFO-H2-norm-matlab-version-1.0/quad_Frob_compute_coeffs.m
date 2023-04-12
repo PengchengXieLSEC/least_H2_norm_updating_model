@@ -3,7 +3,7 @@
 %Email: xpc@lsec.cc.ac.cn
 
 function [lambda_0] = quad_Frob_compute_coeffs(W, tol_svd, b, option)
-%QUAD_FROB_COMPUTE_COEFFS 此处显示有关此函数的摘要
+
 %   此处显示详细说明
     if strcmp(option, 'partial')
         [U, S, VT] = svd(W);
