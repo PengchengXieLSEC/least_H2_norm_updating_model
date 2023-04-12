@@ -209,7 +209,7 @@ function [res, iteration, f_hist] = dfo_tr(bb_func, x_initial, clist, options)
     end
 
     if verbosity
-      fprintf ("| %d | %d | %.4f |   %0.3f   | %0.3f | %d \n", iteration, success, f, delta, rho(1, 1), nY)
+      fprintf ("|| %d || %d || %.4f ||   %0.3f   || %0.3f || %d \n", iteration, success, f, delta, rho(1, 1), nY)
       fprintf ("%.4f \n", x');
     end
 
@@ -265,12 +265,11 @@ function [res, iteration, f_hist] = dfo_tr(bb_func, x_initial, clist, options)
   t2 = clock;
   time_consump = etime(t2, t1);
   if verbosity
-    fprintf ('*****************REPORT************************\n');
-    fprintf ("Total time is %.2f seconds.\n", time_consump);
+    fprintf ("%.2f seconds.\n", time_consump);
     fprintf ("Norm of the gradient of the model is %.2f.\n", normg);
-    fprintf ('***************Final Report**************\n');
-    fprintf ("| iter | success | fevals | final fvalue | final tr_radius|\n");
-    fprintf ("|  %d  |    %d   |  %.2f  |      %.2f    |  %.2f  \n", iteration, iter_suc, func_eval, f, delta)
+    
+    fprintf ("|| iter || success || fevals || final fvalue || final tr_radius|\n");
+    fprintf ("||  %d  ||    %d   ||  %.2f  ||      %.2f    ||  %.2f  \n", iteration, iter_suc, func_eval, f, delta)
   end
   res = struct("x", x, "fun", f, "iteration", iteration, "iter_suc", iter_suc, "func_eval", func_eval, "delta", delta);
 end
