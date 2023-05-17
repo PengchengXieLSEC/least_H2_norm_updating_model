@@ -3,7 +3,7 @@
 %Email: xpc@lsec.cc.ac.cn
 
 function [s, val] = trust_sub(g, H, delta)
-  %func_name可选rosen, sphere, ackley, beale, booth, bukin
+  
   %   
     finfo_float_eps = 2.220446049250313e-16;
     tol = 10e-12;
