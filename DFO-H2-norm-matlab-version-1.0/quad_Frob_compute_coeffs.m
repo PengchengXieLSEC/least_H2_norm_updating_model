@@ -4,7 +4,7 @@
 
 function [lambda_0] = quad_Frob_compute_coeffs(W, tol_svd, b, option)
 
-%   此处显示详细说明
+
     if strcmp(option, 'partial')
         [U, S, VT] = svd(W);
     end
