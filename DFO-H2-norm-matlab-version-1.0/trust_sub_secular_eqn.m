@@ -3,8 +3,8 @@
 %Email: xpc@lsec.cc.ac.cn
 
 function [value] = trust_sub_secular_eqn(lambda_0, eigval, alpha, delta)
-%UNTITLED2 此处显示有关此函数的摘要
-%   此处显示详细说明
+    
+
     m = size(lambda_0,1);
     n = size(eigval,1);
     unn = ones(n, 1);
