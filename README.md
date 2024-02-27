@@ -6,3 +6,5 @@ Authors: Pengcheng Xie, Ya-xiang Yuan
 Connect: xpc@lsec.cc.ac.cn
 
 For more details about the Matlab test codes (initial test version), please Email xpc@lsec.cc.ac.cn. 
+
+The file related to the initial settings of the test problems is setuptest.m
